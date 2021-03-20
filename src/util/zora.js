@@ -70,7 +70,7 @@ export default class ZoraInstance {
                 const data = {
                     creator: creator,
                     id: tokenId,
-                    medatataURI: 'https://gateway.pinata.cloud/ipfs/' + metadataCID,
+                    metadataURI: 'https://gateway.pinata.cloud/ipfs/' + metadataCID,
                     tokenURI: 'https://gateway.pinata.cloud/ipfs/' + tokenCID,
                     timestamp: null
                 }

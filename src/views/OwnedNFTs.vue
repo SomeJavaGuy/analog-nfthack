@@ -42,7 +42,7 @@ export default {
                 Object.assign(nft, {id: arr[i-3]})
                 Object.assign(nft, {creator: arr[i-2]})
                 Object.assign(nft, {tokenURI: arr[i-1]})
-                Object.assign(nft, {medatataURI: arr[i]})
+                Object.assign(nft, {metadataURI: arr[i]})
                 i=i-4
                 nfts.push(nft)
             }
@@ -59,7 +59,6 @@ export default {
                 Promise.all(promises).then((ids) => this.fetchOwnedNFTs(ids))
             })
         })
-
     }
 }
 </script>
