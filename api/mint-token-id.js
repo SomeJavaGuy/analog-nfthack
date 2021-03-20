@@ -1,5 +1,5 @@
 module.exports = async (req, res) => {
-    const { query: { data } } = req
-    console.log(data)
-    res.json(data)
+    console.log(req.body)
+    console.log(req.body.tokeId)
+    res.json(req.body.tokeId)
 }
