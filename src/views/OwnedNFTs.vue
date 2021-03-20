@@ -8,6 +8,7 @@
 <script>
 import {mapState} from 'vuex'
 import NFTComponent from '../components/NFTComponent.vue'
+import {balanceOf,returnId,tokenOfOwnerByIndex,tokenCreators,tokenURI,tokenMetadataURI,ensureContractIsSet} from '../util/mediaContract'
 
 export default {
     name: 'OwnedNFTs',
@@ -23,38 +24,13 @@ export default {
         }
     },
     methods: {
-        returnId(index) {
-            return new Promise(function(resolve, reject){
-                resolve(index)
-            })
-        },
-        tokenOfOwnerByIndex(address, index) {
-            return new Promise((resolve) => {
-                this.authenticator.mediaContract.tokenOfOwnerByIndex(address, index).then(res => resolve(res.toNumber()))
-            })
-        },
-        tokenCreators(id) {
-            return new Promise((resolve) => {
-                this.authenticator.mediaContract.tokenCreators(id).then(res => resolve(res))
-            })
-        },
-        tokenMetadataURI(id) {
-            return new Promise((resolve) => {
-                this.authenticator.mediaContract.tokenMetadataURI(id).then(res => resolve(res))
-            })
-        },
-        tokenURI(id) {
-            return new Promise((resolve) => {
-                this.authenticator.mediaContract.tokenURI(id).then(res => resolve(res))
-            })
-        },
         fetchOwnedNFTs(ids) {
             const promises = []
             for(var i=0; i<ids.length; i++) {
-                promises.push(this.returnId(ids[i]))
-                promises.push(this.tokenCreators(ids[i]))
-                promises.push(this.tokenURI(ids[i]))
-                promises.push(this.tokenMetadataURI(ids[i]))
+                promises.push(returnId(ids[i]))
+                promises.push(tokenCreators(ids[i]))
+                promises.push(tokenURI(ids[i]))
+                promises.push(tokenMetadataURI(ids[i]))
             }
             Promise.all(promises).then((ids) => this.groupFetchedArray(ids))
         },
@@ -74,25 +50,12 @@ export default {
         }
     },
     mounted() {
-        const ensureContractIsSet = (timeout) => {
-            var start = Date.now()
-            const waitForContract = (resolve, reject) => {
-                if (this.authenticator.mediaContract != null)
-                    resolve(this.authenticator.mediaContract)
-                else if (timeout && (Date.now() - start) >= timeout)
-                    reject(new Error("timeout"))
-                else
-                    setTimeout(waitForContract.bind(this, resolve, reject), 30)
-            }
-            return new Promise(waitForContract)
-        }
-
-        ensureContractIsSet(1000000).then(() => {
-            var getBalance = this.authenticator.mediaContract.balanceOf(this.authenticator.currentAccount)
+        ensureContractIsSet().then(() => {
+            var getBalance = balanceOf(this.authenticator.currentAccount)
             getBalance.then((res) => {
                 const balance = res.toNumber()
                 const promises = []
-                for (let i = 0; i < balance; ++i) promises.push(this.tokenOfOwnerByIndex(this.authenticator.currentAccount, i))
+                for (let i = 0; i < balance; ++i) promises.push(tokenOfOwnerByIndex(this.authenticator.currentAccount, i))
                 Promise.all(promises).then((ids) => this.fetchOwnedNFTs(ids))
             })
         })
