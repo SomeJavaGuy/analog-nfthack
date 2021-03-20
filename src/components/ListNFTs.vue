@@ -41,7 +41,7 @@ export default {
         this.handleEvent = (e) => {
             if(this.listEl.scrollTop + this.listEl.clientHeight >= this.listEl.scrollHeight - 0.5) {
                 this.loadMoreNFTs(this.last.id)
-                console.log("load more")
+                console.log("loading more...")
                 this.listEl.removeEventListener('scroll', this.handleEvent)
             }
         }

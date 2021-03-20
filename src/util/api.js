@@ -36,7 +36,6 @@ function getNFTs(last){
     let res = new Promise(function(resolve, reject){
         axios.get('/api/get-nfts', {params: {last: last}})
             .then(response => {
-                console.log(response.data)
                 resolve(response.data)
             })
             .catch(error => {
