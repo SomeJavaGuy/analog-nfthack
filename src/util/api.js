@@ -18,4 +18,18 @@ function getContentHashApi(cid){
     return res
 }
 
-export { getContentHashApi }
+function addNFTtoFirestore(data){
+    let res = new Promise(function(resolve, reject){
+        axios.get('/api/add-nft', {params: {data: data}})
+            .then(response => {
+                resolve(response.data)
+            })
+            .catch(error => {
+                reject(new Error(error))
+            })
+    })
+
+    return res
+}
+
+export { getContentHashApi, addNFTtoFirestore }

@@ -7,7 +7,8 @@ import {
     constructBidShares,
     constructMediaData,
     isMediaDataVerified
-} from '@zoralabs/zdk'  
+} from '@zoralabs/zdk'
+import {addNFTtoFirestore} from './api'
 
 export default class ZoraInstance {
     constructor(signer, chainId) {
@@ -56,9 +57,26 @@ export default class ZoraInstance {
             })
         })
         .then(tx => {
+            console.log(tx)
             return new Promise(function(resolve, reject) {
-                store.state.authenticator.provider.getLogs(filter).then((logs) => {
-                    resolve(logs)
+                store.state.authenticator.provider.getLogs(filter).then((log) => {
+                    resolve({log: log, creator: tx.from})
+                })
+            })
+        })
+        .then(({log, creator}) => {
+            return new Promise(function(resolve, reject){
+                const tokenId = parseInt(log[0].topics[3], 16)
+                const data = {
+                    creator: creator,
+                    id: tokenId,
+                    medatataURI: 'https://gateway.pinata.cloud/ipfs/' + metadataCID,
+                    tokenURI: 'https://gateway.pinata.cloud/ipfs/' + tokenCID,
+                    timestamp: null
+                }
+                console.log(data)
+                addNFTtoFirestore(data).then((res) =>{ 
+                    resolve(res)
                 })
             })
         })
