@@ -15,6 +15,7 @@
     "crypto-js": "^4.0.0",
     "ethers": "^5.0.32",
     "firebase": "^8.3.1",
+    "identicon.js": "^2.3.3",
     "nft.storage": "^0.3.7",
     "promise-polyfill": "^8.2.0",
     "sha256-file": "^1.0.0",

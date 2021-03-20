@@ -16,7 +16,6 @@ const store = new Vuex.Store({
         },
         registerZoraInstance(state, val) {
             state.zora = val
-            console.log(state.zora)
         }
     },
     actions: {
@@ -25,7 +24,6 @@ const store = new Vuex.Store({
             commit('registerAuthenticatorInstance', authenticator)
         },
         registerZora({commit}, {signer, chainId}) {
-            console.log('registerZora triggered')
             const zora = new ZoraInstance(signer, chainId)
             commit('registerZoraInstance', zora)
         }

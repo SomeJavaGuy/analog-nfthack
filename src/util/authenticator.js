@@ -1,11 +1,18 @@
 import { ethers } from 'ethers'
 import store from '../store'
+import Identicon from 'identicon.js'
+
+var identiconOptions = {
+    size: 36,                                // 420px square
+    format: 'svg'                             // use SVG instead of PNG
+  };
 
 export default class Authenticator {
     constructor() {
         this.currentAccount = null
         this.provider = null
         this.signer = null
+        this.identicon = null
         this.initialize()
     }
     initialize() {
@@ -26,6 +33,7 @@ export default class Authenticator {
             console.log('Please connect to MetaMask.')
         } else if (accounts[0] !== this.currentAccount) {
             this.currentAccount = accounts[0]
+            this.identicon = new Identicon(this.currentAccount, identiconOptions).toString()
             this.provider = new ethers.providers.Web3Provider(window.ethereum)
             this.signer = this.provider.getSigner()
             this.getChainId().then(chainId => {
