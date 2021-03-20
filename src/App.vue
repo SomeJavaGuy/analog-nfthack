@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <router-link to="/">Home</router-link><br>
-    <router-link to="/account">Account</router-link><br>
-    <router-link to="/mint">Mint</router-link><br><br>
+    <router-link v-if="authenticator.currentAccount !== null" v-bind:to="'/account/'+authenticator.currentAccount">Account</router-link><br>
+    <router-link v-if="authenticator.currentAccount !== null" to="/mint">Mint</router-link><br><br>
     <button @click="connectProvider" v-if="authenticator.currentAccount === null">Connect to Metamask</button>
     <p>Current account: {{authenticator.currentAccount}}</p>
     <div v-if="authenticator.currentAccount !== null">
@@ -31,7 +31,6 @@ export default {
     }
   },
   beforeCreate () {
-    console.log('dispatch')
     store.dispatch('registerAuthenticator')
   } 
 }

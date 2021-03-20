@@ -15,15 +15,29 @@ firebase.initializeApp(firebaseConfig)
 const db = firebase.firestore()
 
 module.exports = async (req, res) => {
-    const { query: { last } } = req
+    const { query: { last, request } } = req
     let snapshot = null
-    if(last == 0) {
-        snapshot = await db.collection('nfts').orderBy('id', 'desc').limit(2).get()
+    
+    if(request == "all") {
+        if(last == 0) {
+            snapshot = await db.collection('nfts').orderBy('id', 'desc').limit(2).get()
+        } else {
+            snapshot = await db.collection('nfts').orderBy('id', 'desc').startAfter(parseInt(last)).limit(2).get()
+        }
+        const docs = snapshot.docs.map(doc => doc.data())
+        const lastItem = docs[docs.length - 1]
+        res.json({docs, lastItem})
+    } else if(request == "minted") {
+        if(last == 0) {
+            snapshot = await db.collection('nfts').where("creator", "==", "0x83af52d15b9b25bBa26dC60A9C679A4F00aFFdE3").orderBy('id', 'desc').limit(2).get()
+        } else {
+            snapshot = await db.collection('nfts').where("creator", "==", "0x83af52d15b9b25bBa26dC60A9C679A4F00aFFdE3").orderBy('id', 'desc').startAfter(parseInt(last)).limit(2).get()
+        }
+        const docs = snapshot.docs.map(doc => doc.data())
+        const lastItem = docs[docs.length - 1]
+        res.json({docs, lastItem})
     } else {
-        snapshot = await db.collection('nfts').orderBy('id', 'desc').startAfter(parseInt(last)).limit(2).get()
+        res.status(400)
+        res.json({error: 'Bad Request', timestamp: Date.now()})
     }
-    const docs = snapshot.docs.map(doc => doc.data())
-    const lastItem = docs[docs.length - 1]
-    res.json({docs, lastItem})
-
 }

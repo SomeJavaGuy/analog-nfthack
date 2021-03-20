@@ -32,9 +32,9 @@ function addNFTtoFirestore(data){
     return res
 }
 
-function getNFTs(last){
+function getNFTs(last, request){
     let res = new Promise(function(resolve, reject){
-        axios.get('/api/get-nfts', {params: {last: last}})
+        axios.get('/api/get-nfts', {params: {last: last, request: request}})
             .then(response => {
                 resolve(response.data)
             })

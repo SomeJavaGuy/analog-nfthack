@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import store from '../store'
 import Identicon from 'identicon.js'
+import {mediaContractAddress, ABI} from './mediaContract'
 
 var identiconOptions = {
     size: 36,                                // 420px square
@@ -14,6 +15,7 @@ export default class Authenticator {
         this.signer = null
         this.identicon = null
         this.initialize()
+        this.mediaContract = null
     }
     initialize() {
         if(!window.ethereum) return
@@ -36,6 +38,7 @@ export default class Authenticator {
             this.identicon = new Identicon(this.currentAccount, identiconOptions).toString()
             this.provider = new ethers.providers.Web3Provider(window.ethereum)
             this.signer = this.provider.getSigner()
+            this.mediaContract = new ethers.Contract(mediaContractAddress, ABI, this.provider)
             this.getChainId().then(chainId => {
                 store.dispatch('registerZora', {signer: this.signer, chainId: chainId})
             })

@@ -1,9 +1,9 @@
 import {getNFTs} from './api'
 import Promise from 'promise-polyfill'
 
-async function loadNFTs(last) {
+async function loadNFTs(last, request) {
 	return await new Promise((resolve, reject) => {
-		getNFTs(last).then((res) => {
+		getNFTs(last, request).then((res) => {
 			resolve(res)
 		}).catch(() => reject(new Error('failed to fetch NFTs')))
 	})

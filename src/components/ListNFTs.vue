@@ -1,9 +1,6 @@
 <template>
 	<div id="infinite-list" class='scrolling-component' ref='scrollComponent'>
-        <NFTComponent v-if="index != 0" v-for="(nft, index) in nfts"
-            v-bind:nft="nft"
-            v-bind:index="index"
-            v-bind:key="nft.id"/>
+        <NFTComponent v-if="index != 0" v-for="(nft, index) in nfts" :nft="nft" :index="index" :key="nft.id"/>
 	</div>
 </template>
 
@@ -17,6 +14,9 @@ import NFTComponent from './NFTComponent.vue'
 
 export default {
     components: { NFTComponent },
+    props: {
+		request: String
+	},
     data: function (){
         return {
             nfts: [Object()],
@@ -28,7 +28,7 @@ export default {
     methods: {
         loadMoreNFTs(last) {
             (async (last) => {
-                loadNFTs(last).then((docs) => {
+                loadNFTs(last, this.request).then((docs) => {
                     this.nfts.push(...docs.docs)
                     this.last = docs.lastItem
                     this.listEl.addEventListener('scroll', this.handleEvent)

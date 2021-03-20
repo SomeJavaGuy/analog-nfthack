@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
 import Account from './views/Account.vue'
 import Mint from './views/Mint.vue'
+import MintedNFTs from './views/MintedNFTs.vue'
+import OwnedNFTs from './views/OwnedNFTs.vue'
 
 Vue.use(VueRouter)
 
@@ -12,7 +14,17 @@ const router = new VueRouter({
     base: __dirname,
     routes: [
         { name: 'root', path: '/', component: Home },
-        { name: 'feed', path: '/account', component: Account },
+        { name: 'feed', path: '/account/:address', component: Account,
+            children: [
+                {
+                    path: '',
+                    component: MintedNFTs
+                },
+                {
+                    path: 'collection',
+                    component: OwnedNFTs
+                }
+            ]},
         { name: 'mint', path: '/mint', component: Mint }
     ]
 })
