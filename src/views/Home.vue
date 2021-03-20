@@ -22,6 +22,7 @@
         CreatorShare: {{newNFT.creatorShare}}<br>
         OwnerShare: {{newNFT.ownerShare}}<br>
         prevOwnerShare: {{newNFT.prevOwnerShare}}<br>
+        <ListNFTs/>
     </div>
 </template>
 
@@ -31,9 +32,11 @@ import store from '../store'
 import {generateMetadata} from '@zoralabs/zdk'
 import {getContentHashApi} from '../util/api'
 import {uploadToIPFS} from '../util/storage'
-import {Blob} from "nft.storage"
+import {Blob} from 'nft.storage'
+import ListNFTs from '../components/ListNFTs.vue'
 
 export default {
+    components: { ListNFTs },
     name: 'Home',
     computed: mapState(['authenticator', 'zora']),
     data: function (){
