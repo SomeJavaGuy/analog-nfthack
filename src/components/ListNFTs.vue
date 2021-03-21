@@ -47,9 +47,13 @@ export default {
             }
         }
         this.listEl.addEventListener('scroll', this.handleEvent)
-        ensureContractIsSet().then(() => {
+        if(this.request == "all") {
+            this.loadMoreNFTs(0)
+        } else {
+            ensureContractIsSet().then(() => {
             this.loadMoreNFTs(0)
         })
+        }
     }
 }
 </script>

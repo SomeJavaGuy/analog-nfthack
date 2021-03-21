@@ -37,7 +37,6 @@ function getNFTs(last, request){
     let res = new Promise(function(resolve, reject){
         var req = request
         if(req == "minted") req = store.state.authenticator.currentAccount
-        console.log(req)
         axios.get('/api/get-nfts', {params: {last: last, request: req}})
             .then(response => {
                 resolve(response.data)

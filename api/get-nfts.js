@@ -29,7 +29,6 @@ module.exports = async (req, res) => {
         res.json({docs, lastItem})
     } else {
         if(last == 0) {
-            console.log(request)
             snapshot = await db.collection('nfts').where("creator", "==", request).orderBy('id', 'desc').limit(2).get()
         } else {
             snapshot = await db.collection('nfts').where("creator", "==", request).orderBy('id', 'desc').startAfter(parseInt(last)).limit(2).get()
