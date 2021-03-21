@@ -13,8 +13,8 @@ import {addNFTtoFirestore} from './api'
 
 export default class ZoraInstance {
     constructor(signer, chainId) {
-        const mediaAddress = '0xB234eE08DB3b800FD1eEaFF3a01eA3509Cb5297F'
-        const marketAddress = '0x7dF9B10A9dAeB86Eae91e9CDBB75BDc44437E7F4'
+        const mediaAddress = '0xd96A7f0a2C9489D530e51fe7DE1ea2b1d5626CD7'
+        const marketAddress = '0xA83Ff228a9b4a711f8C54031B2a15c62A9416862'
         const zora = new Zora(signer, chainId, mediaAddress, marketAddress)
         this.instance = zora
         this.currency = '0xD92E713d051C37EbB2561803a3b5FBAbc4962431'

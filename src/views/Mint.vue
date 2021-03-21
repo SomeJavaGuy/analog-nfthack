@@ -13,9 +13,10 @@
         <a @click="onPickFile" class="button v3 w-inline-block">
         <div class="button_textlink v3">SELECT IMAGE</div>
         </a>
-        <a @click="mint" class="button v2 w-inline-block">
+        <a @click="mint" v-if="!submitMint" class="button v2 w-inline-block">
         <div class="button_textlink">MINT NFT</div>
         </a>
+        <div class="loader" v-if="submitMint"></div><p v-if="submitMint">{{submitLog}}</p>
         <input type="file" ref="fileInput" accept="image/jpeg" @change="onFilePicked" style="display: none;"/>
     </div>
     <div class="hero_content"><img v-show="previewImg === null" src="../assets/image_preview.svg" loading="lazy" alt="" class="image-3"><img v-show="previewImg !== null" :src="previewImg" loading="lazy" alt="" class="image-3"></div>
@@ -42,7 +43,9 @@ export default {
         return {
             newNFT: { name: null, description: null, image: null, creatorShare: null, ownerShare: null, prevOwnerShare: null, imgName: '' },
             uploadBtnText: 'Upload image',
-            previewImg: null
+            previewImg: null,
+            submitMint: false,
+            submitLog: ''
         }
     },
     methods: {
@@ -57,14 +60,16 @@ export default {
             if(this.newNFT.creatorShare === '' || this.newNFT.creatorShare === null || this.newNFT.creatorShare.value === 0) return
             if(this.newNFT.ownerShare === '' || this.newNFT.ownerShare === null || this.newNFT.ownerShare.value === 0) return
             if(this.newNFT.prevOwnerShare === '' || this.newNFT.prevOwnerShare === null || this.newNFT.prevOwnerShare.value === 0) return
+            this.submitMint = true
             const metadataJSON = generateMetadata('zora-20210101', {
                 description: this.newNFT.description,
                 name: this.newNFT.name,
                 mimeType: 'image/jpeg',
                 version: 'zora-20210101',
             })
+            this.submitLog = 'Uploading image'
             uploadToIPFS(this.newNFT.image).then(cid => {
-                console.log('img uploaded')
+                this.submitLog = 'Generating sha256 hash from image'
                 return new Promise(function(resolve, reject){
                     getContentHashApi(cid)
                         .then(contentHash => resolve({cid: cid, contentHash: contentHash}))
@@ -72,19 +77,21 @@ export default {
                 })
             })
             .then(({cid, contentHash}) => {
+                this.submitLog = 'Uploading metadata'
                 return new Promise(function(resolve, reject){
                     uploadToIPFS(new Blob([metadataJSON])).then(cidMeta => {
-                        console.log('metadata uploaded')
+                        this.submitLog = 'Generating sha256 hash from metadata'
                         getContentHashApi(cidMeta)
                             .then(metadataHash => resolve({cid: cid, contentHash: contentHash, cidMeta: cidMeta, metadataHash: metadataHash}))
                             .catch(error => reject(new Error(error)))
                     })
                     .catch(error => reject(new Error(error)))
-                })
+                }.bind(this))
             })
             .then(({cid, contentHash, cidMeta, metadataHash}) => {
+                this.submitLog = 'Calling smart contract'
                 store.state.zora.mintNFT(cid, cidMeta, contentHash, metadataHash, {creatorShare: Number(this.newNFT.creatorShare), ownerShare: Number(this.newNFT.ownerShare), prevOwnerShare: Number(this.newNFT.prevOwnerShare)})
-                    .then(tx => router.push('feed'))
+                    .then(tx => router.push({ path: '/'}))
             })
         },
         onPickFile () {
