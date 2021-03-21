@@ -3,14 +3,14 @@
     <div data-collapse="medium" data-animation="default" data-duration="400" role="banner" class="navbar w-nav">
       <a aria-current="page" class="brand w-nav-brand w--current">
         <router-link to="/"><h1 class="logo">ANALOG</h1></router-link>
-        <h2 class="logo subhead">NFT Platform</h2>
+        <h2 class="logo subhead">NFT platform</h2>
       </a>
       <nav role="navigation" class="nav-menu w-nav-menu">
         <router-link v-if="authenticator.currentAccount !== null" to="/mint" class="button-light w-button">Mint NFT</router-link>
-        <button @click="connectProvider" v-if="authenticator.currentAccount === null" class="button-light w-button">Connect to Metamask</button>
+        <button @click="connectProvider" v-if="authenticator.currentAccount === null" class="button-light w-button" style="margin-right: 30px;">Connect to Metamask</button>
         <router-link v-if="authenticator.currentAccount !== null" v-bind:to="'/account/'+authenticator.currentAccount"  class="account-link w-inline-block">
             <div class="identicon" :style="'background-image: url(data:image/svg+xml;base64,'+authenticator.identicon+')'"></div>
-            <div>0x79677...e17b</div>
+            <div>{{ authenticator.currentAccount.substring(0,7)}}...{{authenticator.currentAccount.substr(authenticator.currentAccount.length - 5)}}</div>
         </router-link>
       </nav>
       <div class="menu-button w-nav-button"><img src="images/bx-menu-alt-right.svg" alt=""></div>

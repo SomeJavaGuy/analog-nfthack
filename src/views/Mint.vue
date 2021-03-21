@@ -1,17 +1,25 @@
 <template>
-    <div>
-        <h1>Mint</h1>
-        <div>
-            <input type="text" placeholder="Name" v-model="newNFT.name"><br><br>
-            <textarea placeholder="Description" v-model="newNFT.description"></textarea><br><br>
-            <button class="btn btn-info" @click="onPickFile">{{uploadBtnText}}</button>{{newNFT.imgName}}<br><br>
-            <input type="file" ref="fileInput" accept="image/jpeg" @change="onFilePicked" style="display: none;"/>
-            <input type="number" placeholder="Creator Share" v-model="newNFT.creatorShare"><br><br>
-            <input type="number" placeholder="Owner Share" v-model="newNFT.ownerShare"><br><br>
-            <input type="number" placeholder="Previous Owner Share" v-model="newNFT.prevOwnerShare"><br><br>
-            <button @click="mint">Mint</button>
+<div class="hero_home v2">
+    <div class="hero_content v2 no-bottom-border">
+        <div class="form-block w-form">
+        <form id="email-form" name="email-form" data-name="Email Form" class="form-3">
+            <input v-model="newNFT.name" type="text" class="text-field w-input" autofocus="true" maxlength="256" name="title" data-name="title" placeholder="Title" id="title">
+            <textarea v-model="newNFT.description" placeholder="Description..." maxlength="5000" id="field" name="field" class="text-field description w-input"></textarea>
+            <input v-model="newNFT.creatorShare" type="text" class="text-field small w-input" maxlength="256" name="creator-share" data-name="creator-share" placeholder="Creator share" id="creator-share">
+            <input v-model="newNFT.ownerShare" type="text" class="text-field small w-input" maxlength="256" name="owner-share" data-name="owner-share" placeholder="Owner share" id="owner-share">
+            <input v-model="newNFT.prevOwnerShare" type="text" class="text-field small w-input" maxlength="256" name="prev-owner-share" data-name="prev-owner-share" placeholder="Previous owner share" id="prev-owner-share">
+        </form>
         </div>
+        <a @click="onPickFile" class="button v3 w-inline-block">
+        <div class="button_textlink v3">SELECT IMAGE</div>
+        </a>
+        <a @click="mint" class="button v2 w-inline-block">
+        <div class="button_textlink">MINT NFT</div>
+        </a>
+        <input type="file" ref="fileInput" accept="image/jpeg" @change="onFilePicked" style="display: none;"/>
     </div>
+    <div class="hero_content"><img v-show="previewImg === null" src="../assets/image_preview.svg" loading="lazy" alt="" class="image-3"><img v-show="previewImg !== null" :src="previewImg" loading="lazy" alt="" class="image-3"></div>
+</div>
 </template>
 
 <script>
@@ -21,6 +29,7 @@ import {generateMetadata} from '@zoralabs/zdk'
 import {getContentHashApi} from '../util/api'
 import {uploadToIPFS} from '../util/storage'
 import {Blob} from 'nft.storage'
+import {router} from '../router'
 
 export default {
     name: 'Mint',
@@ -32,7 +41,8 @@ export default {
     data: function (){
         return {
             newNFT: { name: null, description: null, image: null, creatorShare: null, ownerShare: null, prevOwnerShare: null, imgName: '' },
-            uploadBtnText: 'Upload image'
+            uploadBtnText: 'Upload image',
+            previewImg: null
         }
     },
     methods: {
@@ -74,7 +84,7 @@ export default {
             })
             .then(({cid, contentHash, cidMeta, metadataHash}) => {
                 store.state.zora.mintNFT(cid, cidMeta, contentHash, metadataHash, {creatorShare: Number(this.newNFT.creatorShare), ownerShare: Number(this.newNFT.ownerShare), prevOwnerShare: Number(this.newNFT.prevOwnerShare)})
-                    .then(tx => console.log(tx))
+                    .then(tx => router.push('feed'))
             })
         },
         onPickFile () {
@@ -84,7 +94,7 @@ export default {
             const files = event.target.files
             this.newNFT.image = files[0]
             this.newNFT.imgName = files[0].name
-            this.uploadBtnText = 'Change image'
+            this.previewImg = URL.createObjectURL(files[0])
         }
     }
 }

@@ -1,8 +1,12 @@
 <template>
     <div>
-        <h1>Account</h1>
-        <router-link :to="'/account/'+authenticator.currentAccount+'/'">Minted</router-link><br>
-        <router-link :to="'/account/'+authenticator.currentAccount+'/collection'">Owned</router-link><br><br>
+        <div class="hero_home">
+            <div class="hero_content">
+                <router-link :to="'/account/'+authenticator.currentAccount+'/'" class="largeheading">Minted</router-link>
+                <a class="largeheading">/</a>
+                <router-link :to="'/account/'+authenticator.currentAccount+'/collection'" href="#" class="largeheading">Owned</router-link>
+            </div>
+        </div>
         <router-view></router-view>
     </div>
 </template>

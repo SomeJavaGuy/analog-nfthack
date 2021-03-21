@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h3>Owned NFTs</h3>
         <NFTComponent v-if="nfts[0].loading != 0" v-for="(nft, index) in nfts" :nft="nft" :index="index" :key="nft.id"/>
     </div>
 </template>

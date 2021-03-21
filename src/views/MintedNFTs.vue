@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h3>Minted NFTs</h3>
         <ListNFTs request="minted"/>
     </div>
 </template>

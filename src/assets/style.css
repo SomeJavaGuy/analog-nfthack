@@ -1960,6 +1960,7 @@ a {
   padding: 12px 20px;
   background-color: #333;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .button.subscribe_button {
@@ -2841,3 +2842,4 @@ a {
   }
 }
 
+a { text-decoration: none; }
