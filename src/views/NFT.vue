@@ -3,20 +3,6 @@
 		<div class="hero_content v2">
 		<h2 id="blotter" class="largeheading nft-heading">{{ title }}</h2>
 		<p class="paragraph cc-large cc-w90">{{ description }}</p>
-		<!--<ul role="list" class="list w-list-unstyled">
-			<li class="list-item">
-			<h6>Film stock:</h6>
-			<div class="attribute-text">Kodak Portra 400</div>
-			</li>
-			<li class="list-item">
-			<h6>Date:</h6>
-			<div class="attribute-text">21.03.2020</div>
-			</li>
-			<li class="list-item">
-			<h6>Location:</h6>
-			<div class="attribute-text">Vienna, Austria</div>
-			</li>
-		</ul>-->
 		<div class="buy-block" v-if="authenticator.currentAccount != creator.toLowerCase() && currentAskPrice != 0">
 			<a href="#" class="button v2 w-inline-block">
 			<div class="button_textlink">BUY NFT</div>
@@ -36,22 +22,6 @@
 		</div>
 		<div class="hero_content"><img :src="tokenURI" loading="lazy" class="image-3"></div>
 	</div>
-	<!--<div>
-		<h1>{{ title }}</h1><br>
-		<img :src="tokenURI">
-		<p>{{ description }}</p>
-		<p>Creator: {{ creator }} </p>
-		<div v-if="authenticator.currentAccount == creator.toLowerCase()">
-			<input type="number" placeholder="Set ask" v-model="setAskPrice"><br>
-			<button @click="setAskBtn">Set Ask</button><br><br>
-			{{currentAskPrice}} TestUSDT<br><br>
-			<input type="text" placeholder="Transfer to address" v-model="transferToAddress"><br>
-			<button @click="transferBtn">Transfer</button><br><br>
-		</div>
-		<div v-if="authenticator.currentAccount != creator.toLowerCase() && currentAskPrice != 0">
-			<button @click="buyBtn">Buy for {{currentAskPrice}} TestUSDT</button><br><br>
-		</div>
-	</div>-->
 </template>
 
 <script>

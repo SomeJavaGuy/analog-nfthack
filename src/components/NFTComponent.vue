@@ -14,13 +14,6 @@
 						<div class="nft-text-small v2">{{ nft.creator.substring(0,5)}}...{{nft.creator.substr(nft.creator.length - 3)}}</div>
 					</div>
 				</div>
-				<!--<div class="nft-details-block">
-					<div class="nft-text-small">owner: </div>
-					<div class="nft-details-address">
-						<div class="identicon v2"></div>
-						<div class="nft-text-small v2">0x1f5...4F3</div>
-					</div>
-				</div>-->
 			</div>
 		</div>
 	</div>
@@ -51,12 +44,11 @@ export default {
 		.then(res => res.json())
 		.then((out) => {
 			this.title = out.name
-			if(out.description.length > 42) {
-				this.description = out.description.substring(0, 42)+'...'
+			if(out.description.length > 35) {
+				this.description = out.description.substring(0, 35)+'...'
 			} else {
 				this.description = out.description
 			}
-			this.description = out.description
 			this.identiconCreator = new Identicon(this.nft.creator, identiconOptions).toString()
 		})
 		.catch(err => { throw err })
