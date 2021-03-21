@@ -1,11 +1,18 @@
 <template>
-	<div id="infinite-list" class='scrolling-component' ref='scrollComponent'>
-        <NFTComponent v-if="index != 0" v-for="(nft, index) in nfts" :nft="nft" :index="index" :key="nft.id"/>
-	</div>
+	<!--<div id="infinite-list" class='scrolling-component' ref='scrollComponent'>  
+	</div>-->
+    <div class="w-dyn-list">
+        <div role="list" class="w-dyn-items w-row scrolling-component" id="infinite-list" ref='scrollComponent'>
+            <NFTComponent v-if="index != 0" v-for="(nft, index) in nfts" :nft="nft" :index="index" :key="nft.id"/>
+        </div>
+    </div>
 </template>
 
 <style scoped>
-.scrolling-component { height: 300px; overflow-y: scroll; }
+.scrolling-component { 
+    height: calc(100vh - 62px);
+    overflow-y: scroll;
+    overflow-x: hidden; }
 </style>
 
 <script>

@@ -1,10 +1,12 @@
 import Promise from 'promise-polyfill'
 import store from '../store'
-import { constructAsk, Zora } from '@zoralabs/zdk'
 import {
+    constructAsk,
+    constructBid,
+    Zora,
     constructBidShares,
     constructMediaData,
-    Decimal
+    Decimal,
 } from '@zoralabs/zdk'
 import { formatUnits } from 'ethers/lib/utils'
 import {addNFTtoFirestore} from './api'
@@ -15,10 +17,19 @@ export default class ZoraInstance {
         const marketAddress = '0x7dF9B10A9dAeB86Eae91e9CDBB75BDc44437E7F4'
         const zora = new Zora(signer, chainId, mediaAddress, marketAddress)
         this.instance = zora
-        this.currency = '0xd92e713d051c37ebb2561803a3b5fbabc4962431'
+        this.currency = '0xD92E713d051C37EbB2561803a3b5FBAbc4962431'
     }
     constructAsk(amount) {
         return constructAsk(this.currency, Decimal.new(amount).value)
+    }
+    constructBid(amount, bidderAddress) {
+        return constructBid(
+            this.currency,
+            Decimal.new(amount).value,
+            bidderAddress,
+            bidderAddress,
+            0
+          )
     }
     async mint(mediaData, bidShares) {
         return await this.instance.mint(mediaData, bidShares)
@@ -73,5 +84,10 @@ export default class ZoraInstance {
     async fetchCurrentAsk(id) {
         const res = await this.instance.fetchCurrentAsk(id)
         return parseFloat(formatUnits(res.amount, 'wei'))
+    }
+    async setBid(id, bid) {
+        console.log("setting bid")
+        console.log(id, bid)
+        return await this.instance.setBid(id, bid)
     }
 }

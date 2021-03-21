@@ -2,11 +2,13 @@ import { ethers } from 'ethers'
 import store from '../store'
 import Identicon from 'identicon.js'
 import {mediaContractAddress, ABI} from './mediaContract'
+import {approveERC20, Decimal} from '@zoralabs/zdk'
+import { MaxUint256 } from '@ethersproject/constants'
 
 var identiconOptions = {
     size: 36,                                // 420px square
     format: 'svg'                             // use SVG instead of PNG
-  };
+}
 
 export default class Authenticator {
     constructor() {
@@ -16,6 +18,7 @@ export default class Authenticator {
         this.identicon = null
         this.initialize()
         this.mediaContract = null
+        this.currency = '0xD92E713d051C37EbB2561803a3b5FBAbc4962431'
     }
     initialize() {
         if(!window.ethereum) return
@@ -57,5 +60,8 @@ export default class Authenticator {
     }
     handleChainChanged(_chainId) {
         window.location.reload()
+    }
+    async grantERC20Approval() {
+        return await approveERC20(this.signer, this.currency, store.state.zora.instance.marketAddress, ethers.utils.parseUnits('1', 6))
     }
 }

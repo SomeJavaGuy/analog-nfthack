@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h1>Home</h1>
         <ListNFTs request="all"/>
     </div>
+
 </template>
 
 <script>
