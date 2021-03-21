@@ -1,8 +1,6 @@
 import Promise from 'promise-polyfill'
 import store from '../store'
 import { Zora } from '@zoralabs/zdk'
-import {mediaContractAddress} from './mediaContract'
-import { ethers } from 'ethers'
 import {
     constructBidShares,
     constructMediaData,
@@ -21,14 +19,6 @@ export default class ZoraInstance {
         return await this.instance.mint(mediaData, bidShares)
     }
     async mintNFT(tokenCID, metadataCID, contentHash, metadataHash, {creatorShare, ownerShare, prevOwnerShare}) {
-        const filter = {
-            address: mediaContractAddress,
-            topics: [ 
-                ethers.utils.id("Transfer(address,address,uint256)"),
-                null,
-                ethers.utils.hexZeroPad(store.state.authenticator.currentAccount, 32)
-            ]
-        }
 
         const tokenURI = 'https://ipfs.io/ipfs/' + tokenCID
         const metadataURI = 'https://ipfs.io/ipfs/' + metadataCID
@@ -51,25 +41,11 @@ export default class ZoraInstance {
                 .then(tx => resolve(tx))
                 .catch(error => reject(new Error(error)))
         }.bind(this))
-        .then(tx => {
-            return new Promise(function(resolve, reject) {
-                tx.wait(1).then(tx => resolve(tx))
-            })
-        })
-        .then(tx => {
-            console.log(tx)
-            return new Promise(function(resolve, reject) {
-                store.state.authenticator.provider.getLogs(filter).then((log) => {
-                    resolve({log: log, creator: tx.from})
-                })
-            })
-        })
-        .then(({log, creator}) => {
+        .then((tx) => {
             return new Promise(function(resolve, reject){
-                const tokenId = parseInt(log[0].topics[3], 16)
                 const data = {
-                    creator: creator,
-                    id: tokenId,
+                    id: null,
+                    creator: store.state.authenticator.currentAccount,
                     metadataURI: 'https://gateway.pinata.cloud/ipfs/' + metadataCID,
                     tokenURI: 'https://gateway.pinata.cloud/ipfs/' + tokenCID,
                     timestamp: null

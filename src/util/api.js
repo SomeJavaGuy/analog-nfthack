@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import store from '../store'
 
 Vue.use(VueAxios, axios)
 
@@ -34,7 +35,10 @@ function addNFTtoFirestore(data){
 
 function getNFTs(last, request){
     let res = new Promise(function(resolve, reject){
-        axios.get('/api/get-nfts', {params: {last: last, request: request}})
+        var req = request
+        if(req == "minted") req = store.state.authenticator.currentAccount
+        console.log(req)
+        axios.get('/api/get-nfts', {params: {last: last, request: req}})
             .then(response => {
                 resolve(response.data)
             })

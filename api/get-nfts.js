@@ -27,17 +27,15 @@ module.exports = async (req, res) => {
         const docs = snapshot.docs.map(doc => doc.data())
         const lastItem = docs[docs.length - 1]
         res.json({docs, lastItem})
-    } else if(request == "minted") {
+    } else {
         if(last == 0) {
-            snapshot = await db.collection('nfts').where("creator", "==", "0x83af52d15b9b25bBa26dC60A9C679A4F00aFFdE3").orderBy('id', 'desc').limit(2).get()
+            console.log(request)
+            snapshot = await db.collection('nfts').where("creator", "==", request).orderBy('id', 'desc').limit(2).get()
         } else {
-            snapshot = await db.collection('nfts').where("creator", "==", "0x83af52d15b9b25bBa26dC60A9C679A4F00aFFdE3").orderBy('id', 'desc').startAfter(parseInt(last)).limit(2).get()
+            snapshot = await db.collection('nfts').where("creator", "==", request).orderBy('id', 'desc').startAfter(parseInt(last)).limit(2).get()
         }
         const docs = snapshot.docs.map(doc => doc.data())
         const lastItem = docs[docs.length - 1]
         res.json({docs, lastItem})
-    } else {
-        res.status(400)
-        res.json({error: 'Bad Request', timestamp: Date.now()})
     }
 }

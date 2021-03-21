@@ -11,6 +11,7 @@
 <script>
 import loadNFTs from '../util/nftLoader'
 import NFTComponent from './NFTComponent.vue'
+import {ensureContractIsSet} from '../util/mediaContract'
 
 export default {
     components: { NFTComponent },
@@ -46,7 +47,9 @@ export default {
             }
         }
         this.listEl.addEventListener('scroll', this.handleEvent)
-        this.loadMoreNFTs(0)
+        ensureContractIsSet().then(() => {
+            this.loadMoreNFTs(0)
+        })
     }
 }
 </script>
