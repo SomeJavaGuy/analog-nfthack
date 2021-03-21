@@ -15,7 +15,7 @@ var firebaseConfig = {
     appId: process.env.FB_APP_ID
 }
 
-const provider = new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/e7dbe6b1b8114267830c34d03602a367')
+const provider = new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/'+process.env.INFURA_API)
 const mediaContract = new ethers.Contract(mediaContractAddress, ABI, provider)
 
 firebase.initializeApp(firebaseConfig)
@@ -31,17 +31,9 @@ module.exports = async (req, res) => {
         db.collection('nfts').where('creator', '==', ownerAddress).where('id', '==', null).get()
             .then(snapshot => {
                 snapshot.forEach(function(document) {
-                    document.ref.update({id: tokenId}).then(() => res.json(200))
+                    document.ref.update({id: parseInt(tokenId)}).then(() => res.json(200))
                 })
             })
-        
-            /*.get(function(querySnapshot) {
-                res.json(querySnapshot)
-                /*querySnapshot.forEach(function(document) {
-                    res.json(document)
-                    //document.ref.update({id: tokenId}).then(() => res.json(200))
-                })*/
-            //})
     })
 
 }
